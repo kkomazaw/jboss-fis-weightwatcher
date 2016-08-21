@@ -28,8 +28,8 @@ then
 	Integer userid = $participant.getUserid( );
 	String factname = new String( "Watch" );
 	String username = new String( $participant.getUsername( ) );
-	String facttxt = new String( "Weightwatcher says that " + username + " WEIGHT averaged " + 
-	String.format( "%.2f", $obsvalueaverage ) + " over the past 7 days" );
+	String facttxt = new String( "Weightwatcher結果: " + username + "さんの過去7日間の平均体重は " + 
+	String.format( "%.2f", $obsvalueaverage ) + " kgです。" );
 
 	ObjectMapper mapper = new ObjectMapper();
     ObjectNode node = mapper.createObjectNode();
@@ -67,8 +67,8 @@ then
 	Integer userid = $participant.getUserid( );
 	String factname = new String( "Watch" );
 	String username = new String( $participant.getUsername( ) );
-	String facttxt = new String( "Weightwatcher says that " + username + " WEIGHT maximum was " + 
-	String.format( "%.2f", $obsvaluehigh ) + " over the past 30 days" );
+	String facttxt = new String( "Weightwatcher結果: " + username + " さんの過去30日間の最大体重は " + 
+	String.format( "%.2f", $obsvaluehigh ) + " kgです。" );
 
 	ObjectMapper mapper = new ObjectMapper();
     ObjectNode node = mapper.createObjectNode();
@@ -111,8 +111,8 @@ then
 	Integer userid = $participant.getUserid( );
 	String factname = new String( "Watch" );
 	String username = new String( $participant.getUsername( ) );
-	String facttxt = new String( "Weightwatcher says that " + username + " WEIGHT change was " + 
-	String.format( "%.2f", $percentchange ) + "% over the past 30 days" );
+	String facttxt = new String( "Weightwatcher結果: " + username + " さんの過去30日間の体重の変化率は " + 
+	String.format( "%.2f", $percentchange ) + "% です。" );
 
 	ObjectMapper mapper = new ObjectMapper();
     ObjectNode node = mapper.createObjectNode();
