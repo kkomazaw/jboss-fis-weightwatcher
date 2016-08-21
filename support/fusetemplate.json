@@ -298,7 +298,7 @@
     	},
     	{
     	  "name": "GIT_REPO",
-    	  "value": "https://github.com/weimeilin79/jboss-fis-weightwatcher.git",
+    	  "value": "https://github.com/kkomazaw/jboss-fis-weightwatcher.git",
     	  "required": true,
     	  "description": "Git repository, required"
     	},
