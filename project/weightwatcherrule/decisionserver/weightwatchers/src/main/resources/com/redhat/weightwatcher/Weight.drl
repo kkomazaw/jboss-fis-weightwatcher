@@ -10,7 +10,7 @@ import com.redhat.weightwatcher.Participant;
 import com.redhat.weightwatcher.Observation;
 import com.redhat.weightwatcher.Fact;
 
-rule "ruleAverageWeight"
+rule "平均体重の計算"
    	salience -1000
    	no-loop true
 when
@@ -49,7 +49,7 @@ then
    	System.out.println( "==>weightwatcher " + rulename + ":" + $obsvalueaverage );
 end
 
-rule "ruleHighWeight"
+rule "最大体重の計算"
    	salience -1000
    	no-loop true
 when
@@ -88,7 +88,7 @@ then
    	System.out.println( "==>weightwatcher " + rulename + ":" + $obsvaluehigh );
 end
 
-rule "ruleChangeWeight"
+rule "体重変化率の計算"
    	salience -1000
    	no-loop true
 when
