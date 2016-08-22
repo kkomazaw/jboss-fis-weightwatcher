@@ -20,7 +20,7 @@
 		<cxf:headers>
 			<cxf:entry key="Http-Method" value="POST"/>
 	   		<cxf:entry key="Charset" value="UTF-8"/>
-	   		<cxf:entry key="Content-Type" value="application/xml"/>
+	   		<cxf:entry key="Content-Type" value="application/xml; charset=UTF-8"/>
 	   		<cxf:entry key="X-KIE-ContentType" value="xstream"/>
 		</cxf:headers>
    	</cxf:rsClient>
