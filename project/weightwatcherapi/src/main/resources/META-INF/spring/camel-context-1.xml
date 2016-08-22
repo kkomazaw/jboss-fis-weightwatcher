@@ -40,7 +40,7 @@
     </marshal>
     <bean ref="beanCreator" method="setGoalFactJson(${headers.userid},${body})" />
     <setBody>
-			<constant>&lt;result&gt;Participant added!&lt;/result&gt;</constant>
+			<constant>&lt;result&gt;Participant を追加しました&lt;/result&gt;</constant>
 	   </setBody>
   </route>
   <route id="updateweight">
