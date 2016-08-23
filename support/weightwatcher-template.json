@@ -335,7 +335,7 @@
                                     }
                                     {
                                         "name": "JAVA_OPTS_APPEND",
-                                        "value": "-Dencoding=UTF-8"
+                                        "value": "-Dfile.encoding=UTF-8"
                                     }
                                 ]
                             }
