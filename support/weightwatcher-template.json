@@ -333,6 +333,10 @@
                                         "name": "HORNETQ_TOPICS",
                                         "value": "${HORNETQ_TOPICS}"
                                     }
+                                    {
+                                        "name": "JAVA_OPTS_APPEND",
+                                        "value": "-Dencoding=UTF-8"
+                                    }
                                 ]
                             }
                         ]
