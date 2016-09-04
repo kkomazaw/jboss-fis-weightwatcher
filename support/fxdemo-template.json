@@ -8,10 +8,10 @@
             "tags": "decisionserver,java,jboss,xpaas",
             "version": "1.2.0"
         },
-        "name": "decisionserver62-fxdemo-s2i"
+        "name": "decisionserver62-weightwatcher-s2i"
     },
     "labels": {
-        "template": "decisionserver62-fxdemo-s2i",
+        "template": "decisionserver62-weightwatcher-s2i",
         "xpaas": "1.2.0"
     },
     "parameters": [
