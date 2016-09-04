@@ -38,32 +38,29 @@
     <convertBodyTo type="java.lang.String"/>
     <log message="The message from QUEUE ${body}"/>
     <setHeader headerName="CamelHttpMethod">
-		<constant>POST</constant>
-   	</setHeader>
-   	<setHeader headerName="CamelHttpPath">
-		<constant>/</constant>
-   	</setHeader>
-   	<multicast>
-    <to uri="cxfrs:bean:rsClient?exchangePattern=InOut"/>
-    </multicast>
+      <constant>POST</constant>
+    </setHeader>
+    <setHeader headerName="CamelHttpPath">
+      <constant>/</constant>
+    </setHeader>
     <to uri="direct:parsedata"/>
   </route>
   <route id="parsedata">
-  	<from uri="direct:parsedata"/>
-  	<convertBodyTo type="org.w3c.dom.Document"/>
+    <from uri="direct:parsedata"/>
+    <convertBodyTo type="org.w3c.dom.Document"/>
     <choice>
       <when>
         <xpath>/org.kie.server.api.model.ServiceResponse/type = 'SUCCESS'</xpath>
-				<setBody>
-					<xpath>/org.kie.server.api.model.ServiceResponse/result/text()</xpath>
-				</setBody>
-		   	<log message="${body}" />
-		   	<convertBodyTo type="java.lang.String"/>
+        <setBody>
+          <xpath>/org.kie.server.api.model.ServiceResponse/result/text()</xpath>
+        </setBody>
+        <log message="${body}"/>
+        <convertBodyTo type="java.lang.String"/>
       </when>
       <otherwise>
         <setBody>
-					<constant>&lt;result&gt;Nothing matches&lt;/result&gt;</constant>
-	   	</setBody>
+          <constant>&lt;result&gt;Nothing matches&lt;/result&gt;</constant>
+        </setBody>
       </otherwise>
     </choice>
     <log message="The message from BRMS ${body}"/>

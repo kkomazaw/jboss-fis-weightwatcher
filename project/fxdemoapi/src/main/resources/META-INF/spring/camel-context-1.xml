@@ -17,31 +17,30 @@
   
   	<bean id="beanCreator" class="com.redhat.weightwatcher.workingbean.BeanCreator" />
   <camelContext xmlns="http://camel.apache.org/schema/spring">
-  	<restConfiguration component="jetty" port="9191" bindingMode="json"/>
-  
-  	<rest path="/weightwatcher">
-	    <get uri="/addParticipant/{userid}/{username}/{target}/{start}/{low}/{high}">
-	      <to uri="direct:addParticipant"/>
-	    </get>
-	    <get uri="/updateweight/{userid}/{obsDate}/{obsvalue}">
-	      <to uri="direct:updateweight"/>
-	    </get>
-	</rest>
+  <restConfiguration component="jetty" port="9191" bindingMode="json"/>
+  <rest path="/weightwatcher">
+    <get uri="/addParticipant/{userid}/{username}/{target}/{start}/{low}/{high}">
+      <to uri="direct:addParticipant"/>
+    </get>
+    <get uri="/updateweight/{userid}/{obsDate}/{obsvalue}">
+      <to uri="direct:updateweight"/>
+    </get>
+  </rest>
   <route id="addParticipant">
     <from uri="direct:addParticipant"/>
     <bean ref="beanCreator" method="addParticipant(${headers.userid},${headers.username})"/>
     <marshal>
       <json library="Jackson"/>
     </marshal>
-    <bean ref="beanCreator" method="setParticipantFactJson(${headers.userid},${body})" />
+    <bean ref="beanCreator" method="setParticipantFactJson(${headers.userid},${body})"/>
     <bean ref="beanCreator" method="addGoal(${headers.userid},${headers.target},${headers.start},${headers.low},${headers.high})"/>
     <marshal>
       <json library="Jackson"/>
     </marshal>
-    <bean ref="beanCreator" method="setGoalFactJson(${headers.userid},${body})" />
+    <bean ref="beanCreator" method="setGoalFactJson(${headers.userid},${body})"/>
     <setBody>
-			<constant>&lt;result&gt;Participant を追加しました&lt;/result&gt;</constant>
-	   </setBody>
+      <constant>&lt;result&gt;Participant を追加しました&lt;/result&gt;</constant>
+    </setBody>
   </route>
   <route id="updateweight">
     <from uri="direct:updateweight"/>
@@ -49,9 +48,9 @@
     <marshal>
       <json library="Jackson"/>
     </marshal>
-    <log message="${body}" />
-    <bean ref="beanCreator" method="setObservationFactJson(${headers.userid},${body})" />
-    <bean ref="beanCreator" method="createSessionContent(${headers.userid})" />
+    <log message="${body}"/>
+    <bean ref="beanCreator" method="setObservationFactJson(${headers.userid},${body})"/>
+    <bean ref="beanCreator" method="createSessionContent(${headers.userid})"/>
     <to uri="amq:queue:WEIGHTWATCHER"/>
   </route>
 </camelContext>

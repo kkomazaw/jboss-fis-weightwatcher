@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.redhat</groupId>
-  <artifactId>weightwatcherapi</artifactId>
+  <artifactId>fxdemoapi</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>A Camel Spring Route</name>
   <url>http://www.myorganization.org</url>
@@ -12,7 +12,7 @@
     <activemq.version>5.11.0.redhat-621084</activemq.version>
     <fuse.version>6.2.1.redhat-084</fuse.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <fabric8.service.name>weightwatcherapi</fabric8.service.name>
+    <fabric8.service.name>fxdemoapi</fabric8.service.name>
     <fabric8.iconRef>camel</fabric8.iconRef>
     <docker.port.container.jolokia>8778</docker.port.container.jolokia>
     <fabric8.label.component>${project.artifactId}</fabric8.label.component>

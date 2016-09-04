@@ -1,5 +1,5 @@
 #!/bin/sh 
-DEMO="FIS Weightloss DEMO"
+DEMO="JBoss FX DEMO"
 AUTHORS="Christina Lin, Andrew Block"
 PROJECT="git@github.com:eschabell/cdk-install-demo.git"
 PRODUCT="JBoss Fuse,JBoss BRMS, Container Development Kit, OpenShift"
@@ -64,17 +64,17 @@ oc login https://10.1.2.2:8443 -u admin -p admin
 echo
 echo "Use new projects"
 echo
-oc new-project fisdemo
+oc new-project fxdemo
 
 echo
-echo "Import weightwatcher template:"
+echo "Import fxdemo template:"
 echo
-oc create -f support/weightwatcher-template.json
+oc create -f support/fxdemo-template.json
 
 echo
 echo "Create the decision server application"
 echo
-oc new-app decisionserver62-weightwatcher-s2i --param=KIE_SERVER_PASSWORD=kieserver1!
+oc new-app decisionserver62-fxdemo-s2i --param=KIE_SERVER_PASSWORD=kieserver1!
 
 
 echo
@@ -109,13 +109,13 @@ echo "=  http://healthcareweb-demo.rhel-cdk.10.1.2.2.xip.io/health.html         
 echo "=                                                                                            ="
 echo "=  Register the participants and set their goal. .                                           ="
 echo "=                                                                                            ="
-echo "=  http://YOUREXPOSEDROUTE/weightwatcher/addParticipant/2/ipavlov@behaviorist.org/75/84/70/78="
+echo "=  http://YOUREXPOSEDROUTE/fxdemo/addParticipant/2/ipavlov@behaviorist.org/75/84/70/78="
 echo "=                                                                                            ="
 echo "=  And then send the observation                                                             ="
 echo "=                                                                                            ="
-echo "=  http://YOUREXPOSEDROUTE/weightwatcher/updateweight/2/2015-04-20%2007:15:00%20EST/79       ="
-echo "=  http://YOUREXPOSEDROUTE/weightwatcher/updateweight/2/2015-04-25%2007:15:00%20EST/77       ="
-echo "=  http://YOUREXPOSEDROUTEweightwatcher/updateweight/2/2015-04-28%2007:15:00%20EST/76        ="
+echo "=  http://YOUREXPOSEDROUTE/fxdemo/updateweight/2/2015-04-20%2007:15:00%20EST/79              ="
+echo "=  http://YOUREXPOSEDROUTE/fxdemo/updateweight/2/2015-04-25%2007:15:00%20EST/77              ="
+echo "=  http://YOUREXPOSEDROUTE/fxdemo/updateweight/2/2015-04-28%2007:15:00%20EST/76              ="
 echo "=                                                                                            ="
 echo "=============================================================================================="
 echo

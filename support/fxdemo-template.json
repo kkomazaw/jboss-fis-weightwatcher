@@ -8,17 +8,17 @@
             "tags": "decisionserver,java,jboss,xpaas",
             "version": "1.2.0"
         },
-        "name": "decisionserver62-weightwatcher-s2i"
+        "name": "decisionserver62-fxdemo-s2i"
     },
     "labels": {
-        "template": "decisionserver62-weightwatcher-s2i",
+        "template": "decisionserver62-fxdemo-s2i",
         "xpaas": "1.2.0"
     },
     "parameters": [
         {
             "description": "The KIE Container deployment configuration in format: containerId=groupId:artifactId:version|c2=g2:a2:v2",
             "name": "KIE_CONTAINER_DEPLOYMENT",
-            "value": "containerweightwatchers10=com.redhat.demos:weightwatchers:1.0",
+            "value": "containerfxdemo10=com.redhat.demos:fxdemo:1.0",
             "required": false
         },
         {
@@ -37,7 +37,7 @@
         {
             "description": "The name for the application.",
             "name": "APPLICATION_NAME",
-            "value": "weightwatcherrules",
+            "value": "fxdemorules",
             "required": true
         },
         {
@@ -49,7 +49,7 @@
         {
             "description": "Git source URI for application",
             "name": "SOURCE_REPOSITORY_URL",
-            "value": "https://github.com/kkomazaw/jboss-fis-weightwatcher.git",
+            "value": "https://github.com/kkomazaw/jboss-fxdemo.git",
             "required": true
         },
         {
@@ -61,7 +61,7 @@
         {
             "description": "Path within Git project to build; empty for root project directory.",
             "name": "CONTEXT_DIR",
-            "value": "project/weightwatcherrule/decisionserver/weightwatchers",
+            "value": "project/fxdemorule/decisionserver/fxdemo",
             "required": false
         },
         {

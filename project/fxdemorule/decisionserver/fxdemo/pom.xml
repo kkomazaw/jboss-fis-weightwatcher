@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.redhat.demos</groupId>
-    <artifactId>weightwatchers</artifactId>
+    <artifactId>fxdemo</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>Weightwatchers</name>
-    <description>Weightwatchers</description>
+    <name>fxdemo</name>
+    <description>FX Demo</description>
 
     <licenses>
         <license>

@@ -3,10 +3,10 @@
     "kind": "Template",
     "metadata": {
         "annotations": {
-            "fabric8.weightwatcherapi/iconUrl": "https://cdn.rawgit.com/fabric8io/fabric8/master/fabric8-maven-plugin/src/main/resources/icons/camel.svg"
+            "fabric8.fxdemoapi/iconUrl": "https://cdn.rawgit.com/fabric8io/fabric8/master/fabric8-maven-plugin/src/main/resources/icons/camel.svg"
         },
         "labels": {},
-        "name": "weightwatcherapi"
+        "name": "fxdemoapi"
     },
     "objects": [
     
@@ -75,7 +75,7 @@
                     "component": "${APP_NAME}",
                     "container": "java",
                     "group": "quickstarts",
-                    "project": "weightwatcherapi",
+                    "project": "fxdemoapi",
                     "provider": "s2i",
                     "version": "1.0.0-SNAPSHOT"
                 },
@@ -215,7 +215,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "weightwatcherapi:latest"
+                "name": "fxdemoapi:latest"
               }
             }
           }
@@ -293,19 +293,19 @@
     "parameters": [
     	{
       "name": "APP_NAME",
-      "value": "weightwatcherapi",
+      "value": "fxdemoapi",
       "description": "Application Name"
     	},
     	{
     	  "name": "GIT_REPO",
-    	  "value": "https://github.com/kkomazaw/jboss-fis-weightwatcher.git",
+    	  "value": "https://github.com/kkomazaw/jboss-fxdemo.git",
     	  "required": true,
     	  "description": "Git repository, required"
     	},
       {
          "description": "Path within Git project to build; empty for root project directory.",
          "name": "CONTEXT_DIR",
-         "value": "project/weightwatcherapi",
+         "value": "project/fxdemoapi",
          "required": false
       },
     	{
@@ -315,7 +315,7 @@
     	},
     	{
     	  "name": "SERVICE_NAME",
-    	  "value": "weightwatcherapi",
+    	  "value": "fxdemoapi",
     	  "description": "Exposed Service name"
     	},
     	{

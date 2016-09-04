@@ -1,5 +1,5 @@
 #!/bin/sh 
-DEMO="FIS Weightloss DEMO"
+DEMO="JBoss FX DEMO"
 AUTHORS="Christina Lin, Andrew Block"
 PROJECT="git@github.com:eschabell/cdk-install-demo.git"
 PRODUCT="JBoss Fuse,JBoss BRMS, Container Development Kit, OpenShift"
