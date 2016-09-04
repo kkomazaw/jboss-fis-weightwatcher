@@ -74,7 +74,7 @@ oc create -f support/fxdemo-template.json
 echo
 echo "Create the decision server application"
 echo
-oc new-app decisionserver62-weightwatcher-s2i --param=KIE_SERVER_PASSWORD=kieserver1!
+oc new-app decisionserver62-fxdemo-s2i --param=KIE_SERVER_PASSWORD=kieserver1!
 
 
 echo
