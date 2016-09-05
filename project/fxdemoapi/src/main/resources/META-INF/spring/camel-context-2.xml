@@ -9,7 +9,7 @@
        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  	<cxf:rsClient id="rsClient" address="http://weightwatcherrules:8080/kie-server/services/rest/server/containers/instances/containerweightwatchers10"
+  	<cxf:rsClient id="rsClient" address="http://fxdemorules:8080/kie-server/services/rest/server/containers/instances/containerfxdemo10"
 	   serviceClass="org.blogdemo.endpoint.CustEval"
 	   username="kieserver"
 	   password="kieserver1!"
