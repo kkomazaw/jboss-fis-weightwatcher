@@ -43,6 +43,9 @@
     <setHeader headerName="CamelHttpPath">
       <constant>/</constant>
     </setHeader>
+    <multicast>
+      <to uri="cxfrs:bean:rsClient?exchangePattern=InOut"/>
+    </multicast>
     <to uri="direct:parsedata"/>
   </route>
   <route id="parsedata">
