@@ -151,6 +151,30 @@
             "spec": {
                 "ports": [
                     {
+                        "port": 61614,
+                        "targetPort": 61614
+                    }
+                ],
+                "selector": {
+                    "deploymentConfig": "${APPLICATION_NAME}-amq"
+                }
+            },
+            "metadata": {
+                "name": "${APPLICATION_NAME}-amq-websocket",
+                "labels": {
+                    "application": "${APPLICATION_NAME}"
+                },
+                "annotations": {
+                    "description": "The broker's Websocket port."
+                }
+            }
+        },
+        {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "spec": {
+                "ports": [
+                    {
                         "port": 61616,
                         "targetPort": 61616
                     }
@@ -248,6 +272,11 @@
                                     {
                                         "name": "stomp",
                                         "containerPort": 61613,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "name": "websocket",
+                                        "containerPort": 61614,
                                         "protocol": "TCP"
                                     },
                                     {
