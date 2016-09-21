@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camelContext id="camelContext-b337f7d1-0879-431e-b744-1f30bbcccb63"
+        trace="false" xmlns="http://camel.apache.org/schema/spring">
+        <route id="getTick">
+            <from id="_to1" uri="timer:tick?period=2000"/>
+            <setHeader headerName="Authorization" id="authorization">
+                <constant>Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862</constant>
+            </setHeader>
+            <setHeader headerName="CamelHttpMethod" id="http-method">
+                <constant>GET</constant>
+            </setHeader>
+            <to id="_to2" uri="https://api-fxpractice.oanda.com/v1/prices?instruments=USD_JPY"/>
+            <to id="amq" uri="amq:topic:FXDEMO"/>
+            <log id="_log1" message="${body}"/>
+        </route>
+    </camelContext>
+</beans>
