@@ -13,7 +13,7 @@
                 <constant>GET</constant>
             </setHeader>
             <to id="_to2" uri="https://api-fxpractice.oanda.com/v1/prices?instruments=USD_JPY"/>
-            <to id="amq" uri="amq:topic:FXDEMO"/>
+            <to id="_toamq1" uri="amq:topic:FXDEMO"/>
             <log id="_log1" message="${body}"/>
         </route>
     </camelContext>
