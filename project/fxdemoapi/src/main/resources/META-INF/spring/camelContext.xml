@@ -8,7 +8,7 @@
     </bean>
     <bean class="io.fabric8.mq.camel.AMQComponent" id="amq"/>
 
-    <bean class="com.mycompany.fxtest.BeanCreator" id="beanCreator"/>
+    <bean class="com.mycompany.fxtest.BeanCreator" id="beanCreator2"/>
     <cxf:rsClient
         address="http://fxdemorules:8080/kie-server/services/rest/server/containers/instances/containerfxdemo10"
         id="rsClient" loggingFeatureEnabled="true"
@@ -42,7 +42,7 @@
             <log id="_log1" message="${body}"/>
             <to id="_to3" uri="https://api-fxpractice.oanda.com/v1/prices?instruments=USD_JPY"/>
             <unmarshal id="_unmarshal1" ref="myJson"/>
-            <bean id="_bean1" method="createSessionContent(${body})" ref="beanCreator"/>
+            <bean id="_bean1" method="createSessionContent(${body})" ref="beanCreator2"/>
             <convertBodyTo id="_convertBodyTo1" type="java.lang.String"/>
             <log id="_log2" message="The message from QUEUE ${body}"/>
             <setHeader headerName="CamelHttpMethod" id="_setHeader1">
