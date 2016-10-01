@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>MyFX Demo</title>
+  <meta charset="utf-8"/>
+  <script src="js/mqttws31.js"></script>
+  <style type="text/css">
+  </style>
+ </head>
+ <body>
+  <p align="center">
+  <button type="button" onclick="connectMQTT();">ログイン</button>
+  <button type="button" onclick="sellPosition();">売</button>
+  <button type="button" onclick="buyPosition();">買</button>
+  <button type="button" onclick="closePosition();">全決済</button>
+  <br /></p>
+
+  <table align="center" border="0" cellpadding="0" cellspacing="0">  
+  <tr>  
+  <td align="right" style="color:white;background-color: blue;">売(Bid)</td>  
+  <td></td>
+  <td style="color:white;background-color: red;">買(Ask)</td>  
+  </tr>
+  <td style="background-color: #FFFFFF;"><textarea style="text-align: center;font-size:36pt;color:white;background-color:blue" id="bid" rows="1" cols="8" readonly="readonly"></textarea></td>
+  <td align="center" style="font-size:12pt;color:black;background-color: white;">スプレッド <br>0.4</td>
+  <td style="background-color: #FFFFFF;"><textarea style="text-align: center;font-size:36pt;color:white;background-color:red" id="ask" rows="1" cols="8" readonly="readonly"></textarea></td>  
+  </tr>
+  <tr>
+  <td align="right" style="font-size:16pt;color:blue;background-color: white;">売建</td>  
+  <td align="center" style="font-size:8pt;color:red;background-color: white;"></td>
+  <td style="font-size:16pt;color:red;background-color: white;">買建</td>  
+  </tr>
+  <tr>
+  <td align="right" style="color:blue;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="bidPos" rows="1" cols="8" readonly="readonly"></textarea></td>  
+  <td align="center" style="font-size:16pt;color:black;background-color:white">注文数量</td>
+  <td style="color:red;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="askPos" rows="1" cols="8" readonly="readonly"></textarea></td>  
+  </tr>
+  <tr>
+  <td align="right" style="color:blue;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="bidAvgPos" rows="1" cols="8" readonly="readonly"></textarea></td>  
+  <td align="center" style="font-size:16pt;color:black;background-color:white">平均建値</td>
+  <td style="color:red;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="askAvgPos" rows="1" cols="8" readonly="readonly"></textarea></td>
+  </tr>
+  <tr>
+  <td align="right" style="color:blue;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="bidPosPl" rows="1" cols="8" readonly="readonly"></textarea></td>  
+  <td align="center" style="font-size:16pt;color:black;background-color:white">総合計損益</td>
+  <td style="color:red;background-color: white;"><textarea style="text-align: right;font-size:16pt;color:black;background-color:white" id="askPosPl" rows="1" cols="8" readonly="readonly"></textarea></td>
+  </tr>
+  </table>
+
+  <p align="center">
+  資産合計<br/>
+  <textarea style="text-align:center;font-size:32pt;color:black;background-color:white;border:0"; id="account" rows="1" cols="15" readonly="readonly"></textarea>
+   <textarea style="text-align:center;font-size:16pt;color:red;background-color:white;border:0"; id="recommend" rows="1" cols="40" readonly="readonly"></textarea>
+  </p>
+ </body>
+ <script>  
+
+//  var textForTick = document.getElementById('tick');
+  var textForBid = document.getElementById('bid');
+  var textForAsk = document.getElementById('ask');
+  var textForPosition = document.getElementById('position');
+  var textForBidPos = document.getElementById('bidPos');
+  var textForAskPos = document.getElementById('askPos');
+  var textForBidAvgPos = document.getElementById('bidAvgPos');
+  var textForAskAvgPos = document.getElementById('askAvgPos');
+  var textForBidPosPl = document.getElementById('bidPosPl');
+  var textForAskPosPl = document.getElementById('askPosPl');
+  var textForAccount = document.getElementById('account');
+  var textForRecommend = document.getElementById('recommend');
+  
+  function randomString(len, charSet) {
+    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomString = '';
+    for (var i = 0; i < len; i++) {
+      var randomPoz = Math.floor(Math.random() * charSet.length);
+      randomString += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return randomString;
+  }
+
+  function EncodeHTMLForm( data )
+  {
+    var params = [];
+
+    for( var name in data )
+    {
+        var value = data[ name ];
+        var param = encodeURIComponent( name ) + '=' + encodeURIComponent( value );
+        params.push( param );
+    }
+    return params.join( '&' ).replace( /%20/g, '+' );
+  }
+
+  function floatFormat( number, n ) {
+    var _pow = Math.pow( 10 , n ) ;
+
+    return Math.round( number * _pow ) / _pow ;
+  }
+
+  function zeropad(num, len){
+      p = (num + ".").split(".");
+      return p[0] + "." + (p[1] + "0000000000").substr(0, len);
+  }
+
+  function addComma(str) {
+  var num = new String(str).replace(/,/g, "");
+  while(num != (num = num.replace(/^(-?\d+)(\d{3})/, "$1,$2")));
+  return num;
+  }
+
+  function buyPosition() {
+    var data = { instrument: 'USD_JPY', units: 1000, side: 'buy', type: 'market' }; 
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.onreadystatechange = function()
+    {
+        var READYSTATE_COMPLETED = 4;
+        var HTTP_STATUS_OK = 200;
+
+        if( this.readyState == READYSTATE_COMPLETED
+         && this.status == HTTP_STATUS_OK )
+        {
+//            alert( this.responseText );
+            listPosition();
+            showAccount();
+        }
+    }
+
+    xmlHttpRequest.open( 'POST', 'https://api-fxpractice.oanda.com/v1/accounts/1051576/orders' );
+    xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+    xmlHttpRequest.setRequestHeader( 'Authorization', 'Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862' );
+    xmlHttpRequest.send( EncodeHTMLForm( data ) );
+  }
+
+   function sellPosition() {
+    var data = { instrument: 'USD_JPY', units: 1000, side: 'sell', type: 'market' }; 
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.onreadystatechange = function()
+    {
+        var READYSTATE_COMPLETED = 4;
+        var HTTP_STATUS_OK = 200;
+
+        if( this.readyState == READYSTATE_COMPLETED
+         && this.status == HTTP_STATUS_OK )
+        {
+//            alert( this.responseText );
+            listPosition();
+            showAccount();
+        }
+    }
+
+    xmlHttpRequest.open( 'POST', 'https://api-fxpractice.oanda.com/v1/accounts/1051576/orders' );
+    xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+    xmlHttpRequest.setRequestHeader( 'Authorization', 'Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862' );
+    xmlHttpRequest.send( EncodeHTMLForm( data ) );
+  }
+
+  function listPosition() {
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.onreadystatechange = function()
+    {
+        var READYSTATE_COMPLETED = 4;
+        var HTTP_STATUS_OK = 200;
+
+        if( this.readyState == READYSTATE_COMPLETED
+         && this.status == HTTP_STATUS_OK )
+        {
+            var data = JSON.parse(this.responseText);
+            var positions = data.positions;
+            for (var i in positions) {
+              if (positions[i].side == 'sell') {
+                 textForBidPos.value = positions[i].units;
+                 textForBidAvgPos.value = zeropad(positions[i].avgPrice, 3);
+                 textForBidPosPl.value = Math.round(positions[i].units * (positions[i].avgPrice - textForAsk.value));
+              }
+              else {
+                 textForAskPos.value = positions[i].units;
+                 textForAskAvgPos.value = zeropad(positions[i].avgPrice, 3);                
+                 textForAskPosPl.value = Math.round(positions[i].units * (positions[i].avgPrice - textForBid.value));
+              }
+            }
+            if (positions[0] == null) {
+                 textForBidPos.value = 0;
+                 textForBidAvgPos.value = 0;
+                 textForBidPosPl.value = 0;
+                 textForAskPos.value = 0;
+                 textForAskAvgPos.value = 0;
+                 textForAskPosPl.value = 0;            
+            }
+        }
+    }
+
+    xmlHttpRequest.open( 'GET', 'https://api-fxpractice.oanda.com/v1/accounts/1051576/positions' );
+    xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+    xmlHttpRequest.setRequestHeader( 'Authorization', 'Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862' );
+    xmlHttpRequest.send();
+  }
+
+  function closePosition() {
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.onreadystatechange = function()
+    {
+        var READYSTATE_COMPLETED = 4;
+        var HTTP_STATUS_OK = 200;
+
+        if( this.readyState == READYSTATE_COMPLETED
+         && this.status == HTTP_STATUS_OK )
+        {
+//            alert( this.responseText );
+            listPosition();
+            showAccount();
+        }
+    }
+
+    xmlHttpRequest.open( 'DELETE', 'https://api-fxpractice.oanda.com/v1/accounts/1051576/positions/USD_JPY' );
+    xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+    xmlHttpRequest.setRequestHeader( 'Authorization', 'Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862' );
+    xmlHttpRequest.send();
+  }
+
+   function showAccount() {
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.onreadystatechange = function()
+    {
+        var READYSTATE_COMPLETED = 4;
+        var HTTP_STATUS_OK = 200;
+
+        if( this.readyState == READYSTATE_COMPLETED
+         && this.status == HTTP_STATUS_OK )
+        {
+            var data = JSON.parse(this.responseText);
+            textForAccount.value = '¥' + addComma(Math.round(data.balance));
+        }
+    }
+
+    xmlHttpRequest.open( 'GET', 'https://api-fxpractice.oanda.com/v1/accounts/1051576' );
+    xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+    xmlHttpRequest.setRequestHeader( 'Authorization', 'Bearer b3b4271b3642d2f77e0e27e00a993dcf-ba79a03fa29040ebfd437036898a6862' );
+    xmlHttpRequest.send();
+  }
+
+  function subscribe() {
+   // set callback
+   client.onMessageArrived = onMessageArrived;
+
+   // Subscribe
+   client.subscribe("FXDEMO");
+   client.subscribe("FXRECOMMEND");
+  }
+  // -------- handling messaging server ----
+  var clientId = randomString(5);
+  var user_name = "admin";
+  var pass = "admin";
+  var wsurl = "ws://broker-amq-websocket-fxdemo.rhel-cdk.10.1.2.2.xip.io:8080/mqtt";
+  var client = new Paho.MQTT.Client(wsurl, clientId);
+  var MQTTconnected = false;
+
+
+  function connectMQTT() {
+    // connect to MQTT broker
+    if (!MQTTconnected) {
+     client.connect({userName: user_name, password: pass, onSuccess: onConnect, onFailure: failConnect});
+     console.log("clientId="+clientId+", user_name="+user_name+" connected.");
+   
+     textForBidPos.value = 0;
+     textForBidAvgPos.value = 0;
+     textForBidPosPl.value = 0;
+     textForAskPos.value = 0;
+     textForAskAvgPos.value = 0;
+     textForAskPosPl.value = 0;
+     listPosition();
+     showAccount();
+
+     MQTTConnected = true;
+   } else {
+    console.log("already connected.");
+   }
+  }
+
+  function onMessageArrived(message) {
+   console.log("onMessageArrived:" + message.destinationName + ' -- ' + message.payloadString);
+
+   if (message.destinationName == "FXDEMO") {
+     var data = JSON.parse(message.payloadString);
+     textForBid.value = zeropad(data.prices[0].bid, 3);
+     textForAsk.value = zeropad(data.prices[0].ask, 3);
+     textForBidPosPl.value = Math.round(textForBidPos.value * (textForBidAvgPos.value - textForAsk.value));
+     textForAskPosPl.value = Math.round(textForAskPos.value * (textForBid.value - textForAskAvgPos.value));
+   } else if (message.destinationName == "FXRECOMMEND") {
+    textForRecommend.value = message.payloadString;
+   }
+
+  }
+
+  function disconnectMQTT() {
+    // disconnect from MQTT broker
+    if (MQTTconnected) {
+      client.disconnect();
+      console.log("MQTT disconnected.");
+      MQTTconnected = false;
+    } else {
+      console.log("not connected.");
+    }
+  }
+
+  function failConnect(e) {
+   console.log("connect failed");
+   console.log(e);
+  }
+
+  function onConnect() {
+   console.log("onConnect");
+   subscribe();
+   MQTTconnected = true;
+  }
+
+ </script>
+</html>
