@@ -9,22 +9,6 @@
      </bean>
      <bean id="amq" class="io.fabric8.mq.camel.AMQComponent"></bean>
 
-    <bean class="com.mycompany.fxtest.BeanCreator" id="beanCreator"/>
-    <cxf:rsClient
-        address="http://fxdemorules-fxdemo.rhel-cdk.10.1.2.2.xip.io/kie-server/services/rest/server/containers/instances/containerfxdemo10"
-        id="rsClient" loggingFeatureEnabled="true"
-        password="kieserver1!"
-        serviceClass="org.blogdemo.endpoint.CustEval" username="kieserver">
-        <cxf:providers>
-            <bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
-        </cxf:providers>
-        <cxf:headers>
-            <cxf:entry key="Http-Method" value="POST"/>
-            <cxf:entry key="Charset" value="UTF-8"/>
-            <cxf:entry key="Content-Type" value="application/xml; charset=UTF-8"/>
-            <cxf:entry key="X-KIE-ContentType" value="xstream"/>
-        </cxf:headers>
-    </cxf:rsClient>
     <camelContext id="camelContext-b337f7d1-0879-431e-b744-1f30bbcccb63"
         trace="false" xmlns="http://camel.apache.org/schema/spring">
         <route id="getTick">
